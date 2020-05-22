@@ -1,35 +1,58 @@
 // Coin Holder Keychain
-$fn=90;
-//customizer variables
+
+//To Do:
+//Move building of display features in to own module
+//Correct display features to use unbuffered coin dimensions
+//*BUG* keyhole feature on retainer restricted by coin diameter
+
 /*[Coin Pocket]*/
-coin_d=20; //coin diameter
-coin_t=2; //coin thickness
+//Coin Diameter
+coin_d=24.25;
+//Coin Thickness
+coin_t=1.75;
 
 /*[Outer Shell]*/
-//make these variables be the overage beyond the size of the coin?
-case_d=22; //case diameter
+//How much wider than the coin to make the case
+case_d=8;
+//How much thicker than the coin to make the case
 case_t=4; //case thickness
-keyring=true; //make keyring features
-fob_d=6; //diameter of keyring protrusion feature --as percentage of coin/body size?
+//Make keyring features?
+keyring=true;
+//Diameter of the keyring feature
+fob_d=10;
+//Keyring feature offset
 fob_offset=0.6;//[0.1:0.1:5]
-keyhole_d=2; //diameter of keyring hole
+//Diameter of keyring hole
+keyhole_d=6;
 
 /*[Display Features]*/
+//Display both sides?
 sides=true;
-display_d=0.90; //[0.5:0.5:100]
+//Percentage of coin face to display
+display_d=0.95; //[0.05:0.05:0.95]
 //embellishments around the edge of the retention face
-display_trim=0;//[0:plain,1:lace,2:flags,3:daggers]
+//display_trim=0;//[0:plain,1:lace,2:flags,3:daggers]
 //add options for trim size/width/spacing
 
+/*[Advanced]*/
+//pad variables from customizer input
+//buffer coin dimensions by this amount to allow for clearance of the coin into the holder
+coin_b=0.2; //[0:0.05:1]
+//Circle resolution; higher values may result in increased rendering, slicing and print times.
+$fn=40; //[4:360]
+coin_fd=coin_d+coin_b; //buffer coin diameter
+coin_ft=coin_t+coin_b; //buffer coin thickness
+case_fd=coin_d+case_d; //final diameter of case
+case_ft=coin_t+case_t; //final thickness of case
 
-//pad variables from customizer input?
-coin_b=0.25; //buffer coin dimensions by this amount to allow for clearance of the coin into the holder [0:0.05:1]
+//make shell with buffered coin vars
+translate([0,0,case_t/2]) make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
 
-translate([0,0,case_t/2]) make_shell(case_d,case_t,fob_d,coin_d,coin_t,keyhole_d);
-translate([0,case_d,coin_t/2])
-make_retainer(case_d,case_t,fob_d,coin_d,coin_t,keyhole_d);
+//make retainer with unbuffered coin vars
+translate([0,case_fd,coin_t/2])
+make_retainer(case_fd,case_ft,fob_d,coin_d,coin_t,keyhole_d);
 
-//module make_shell --build main body
+//build main body
 module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
     difference(){
         //shell
@@ -59,7 +82,12 @@ module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
     
 }
 
-//module make_retainer
+
+//build display features
+module make_display(){
+}
+
+//build retention insert
 module make_retainer(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
     difference(){
         intersection(){
