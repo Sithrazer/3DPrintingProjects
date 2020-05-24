@@ -1,9 +1,7 @@
 // Coin Holder Keychain
 
 //To Do:
-//Move building of display features in to own module
-//Correct display features to use unbuffered coin dimensions
-//*BUG* keyhole feature on retainer restricted by coin diameter
+//Expand display features
 
 /*[Coin Pocket]*/
 //Coin Diameter
@@ -46,7 +44,10 @@ case_fd=coin_d+case_d; //final diameter of case
 case_ft=coin_t+case_t; //final thickness of case
 
 //make shell with buffered coin vars
-translate([0,0,case_t/2]) make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
+translate([0,0,case_ft/2]) difference(){
+    make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
+    make_display(sides,case_ft,coin_d,display_d);
+}
 
 //make retainer with unbuffered coin vars
 translate([0,case_fd,coin_t/2])
@@ -65,26 +66,29 @@ module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
         //coin pocket
         hull(){
             cylinder(cn_t,d=cn_d,center=true);
-            translate([cs_d*fob_offset,0,0]) cylinder(cn_t,d=cn_d,center=true);
+            if (keyring){
+                translate([cs_d*fob_offset+fob_d,0,0]) cylinder(cn_t,d=cn_d,center=true);
+            }
+            else {
+                translate([cs_d,0,0]) cylinder(cn_t,d=cn_d,center=true);
+            }
         }
         //keyhole
         if (keyring){
             translate([cs_d*fob_offset,0,0]) cylinder(cs_t,d=kh_d,center=true);
         }
-        //display opening
-        if (sides) {
-            cylinder(cs_t,d=cn_d*display_d,center=true);
-        }
-        else {
-            translate([0,0,case_t/2]) cylinder(cs_t,d=cn_d*display_d,center=true);
-        }
     }
-    
 }
 
 
 //build display features
-module make_display(){
+module make_display(sides,cs_t,cn_d,dis_d){
+    if (sides) {
+        cylinder(cs_t,d=cn_d*dis_d,center=true);
+    }
+    else {
+        translate([0,0,case_t/2]) cylinder(cs_t,d=cn_d*dis_d,center=true);
+        }
 }
 
 //build retention insert
@@ -103,7 +107,7 @@ module make_retainer(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
             //coin region
             hull(){
                 cylinder(cn_t,d=cn_d,center=true);
-                translate([cs_d*fob_offset,0,0]) cylinder(cn_t,d=cn_d,center=true);
+                translate([cs_d*fob_offset+fob_d,0,0]) cylinder(cn_t,d=cn_d,center=true);
             }
         }
         //coin space
