@@ -27,13 +27,15 @@ keyhole_d=6;
 //Display both sides?
 sides=true;
 //Percentage of coin face to display
-display_d=0.95; //[0.05:0.05:0.95]
+display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
 display_trim=0;//[0:plain,1:lace,2:flags,3:daggers]
 //Number of trim pieces, no effect on 'plain'
 trim_num=8;//[2:20]
 //Width of trim pieces as percentage of spacing
 trim_width=1;//[0.1:0.05:2]
+//Adjust position of display features around periphery 
+feature_r=0;//[0:0.5:180]
 //add options for trim size/width/spacing
 
 /*[Advanced]*/
@@ -51,6 +53,11 @@ coin_ft=coin_t+coin_b; //buffer coin thickness
 case_fd=coin_d+case_d; //final diameter of case
 case_ft=coin_t+case_t; //final thickness of case
 coin_c=PI*(coin_d/2); //coin circumference
+
+
+*make_ring(trim_num){
+    translate([coin_d/2,0,0]) square([coin_d-coin_d*display_d,(coin_c/trim_num)*trim_width],center=true);
+}
 
 if(body){ //make shell with buffered coin vars
     translate([0,0,case_ft/2]) //correct vertical offset
@@ -99,21 +106,38 @@ module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
 
 //build display features
 module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
+    //radial thickness of display features
+    feat_t=cn_d/2-(cn_d/2)*dis_d;
+    //circumferential width of display features
+    feat_w=(coin_c/trim_num)*trim_width;
+    
     //close backside if single-sided
     if (!sides) {
         translate([0,0,-(cs_t/2-cn_ft/2)]) cylinder(cs_t/2-cn_ft/2,d=cn_fd,center=true);
     }
     
-    //make plain retainer
-    if (display_trim==0){
+    //choose display feature type
+    if (display_trim==0){ //make plain retainer
         difference(){
             cylinder(cs_t,d=cn_fd,center=true);
             cylinder(cs_t+1,d=cn_d*dis_d,center=true);
         }
     }
+    else if (display_trim==2){ //make flag (square) retainers
+        make_ring(trim_num){
+            rotate([0,0,feature_r]) translate([cn_d/2-feat_t/3,0,0]) cube([feat_t,feat_w,cs_t],center=true);
+        }
+    }
 }
 
-//build rotator function for display features
+//rotator function for display features
+module make_ring(count){
+    for( i = [0:count-1]){
+        angle = i * 360 / count;
+        rotate([0,0,angle])
+        children();
+    }
+}
 
 //build retention insert
 module make_retainer(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
