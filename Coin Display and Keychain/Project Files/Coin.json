@@ -1,0 +1,47 @@
+{
+    "parameterSets": {
+        "US Quarter": {
+            "$fn": "40",
+            "case_d": "8",
+            "case_t": "4",
+            "coin_b": "0.2",
+            "coin_d": "24.25",
+            "coin_t": "1.75",
+            "display_d": "0.95",
+            "fob_d": "10",
+            "fob_offset": "0.6",
+            "keyhole_d": "6",
+            "keyring": "true",
+            "sides": "true"
+        },
+        "US Nickel": {
+            "$fn": "40",
+            "case_d": "8",
+            "case_t": "4",
+            "coin_b": "0.2",
+            "coin_d": "21.21",
+            "coin_t": "1.95",
+            "display_d": "0.95",
+            "fob_d": "10",
+            "fob_offset": "0.6",
+            "keyhole_d": "6",
+            "keyring": "true",
+            "sides": "true"
+        },
+        "Standard Poker Chip": {
+            "$fn": "40",
+            "case_d": "8",
+            "case_t": "4",
+            "coin_b": "0.2",
+            "coin_d": "39",
+            "coin_t": "3.3",
+            "display_d": "0.95",
+            "fob_d": "10",
+            "fob_offset": "0.6",
+            "keyhole_d": "6",
+            "keyring": "true",
+            "sides": "true"
+        }
+    },
+    "fileFormatVersion": "1"
+}
