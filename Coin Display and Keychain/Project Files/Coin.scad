@@ -61,7 +61,7 @@ if(body){ //make shell with buffered coin vars
         difference(){
             make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
             rotate([0,0,-30]) make_ring(3,90){ //snap-fit detent recesses
-                translate([detent_r,0,-(detent_sr)]) sphere(detent_sr);
+                translate([detent_r,0,-(coin_ft/2)]) sphere(detent_sr);
             }
         }
     }
@@ -120,7 +120,8 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
     
     //close backside if single-sided
     if (!sides) {
-        translate([0,0,-(cs_t/2-cn_ft/2)]) cylinder(cs_t/2-cn_ft/2,d=cn_fd,center=true);
+        translate([0,0,-(cs_t/2)]) cylinder(cs_t/2-cn_ft/2,d=cn_fd,center=!true);
+        echo();
     }
     
     //choose display feature type
