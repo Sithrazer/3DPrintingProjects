@@ -29,7 +29,7 @@ sides=true;
 //Percentage of coin face to display
 display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
-display_trim=0;//[0:plain,1:lace,2:flags,3:daggers]
+display_trim=0;//[0:plain,1:scales,2:flags,3:daggers]
 //Number of trim pieces, no effect on 'plain'
 trim_num=8;//[2:20]
 //Width of trim pieces as percentage of spacing
@@ -50,23 +50,30 @@ body=true;
 retainer=true;
 coin_fd=coin_d+coin_b; //buffer coin diameter
 coin_ft=coin_t+coin_b; //buffer coin thickness
-case_fd=coin_d+case_d; //final diameter of case
+case_fd=coin_fd+case_d; //final diameter of case
 case_ft=coin_t+case_t; //final thickness of case
 coin_c=PI*(coin_d/2); //coin circumference
-
-
-*make_ring(trim_num){
-    translate([coin_d/2,0,0]) square([coin_d-coin_d*display_d,(coin_c/trim_num)*trim_width],center=true);
-}
+detent_r=(case_fd/2-coin_fd/2)/2+coin_fd/2;
+detent_sr=1;
 
 if(body){ //make shell with buffered coin vars
-    translate([0,0,case_ft/2]) //correct vertical offset
-    make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
+    translate([0,0,case_ft/2]){ //correct vertical offset
+        difference(){
+            make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
+            rotate([0,0,-30]) make_ring(3,90){ //snap-fit detent recesses
+                translate([detent_r,0,-(detent_sr)]) sphere(detent_sr);
+            }
+        }
+    }
 }
 
 if(retainer){ //make retainer with unbuffered coin vars
-    translate([0,case_fd,coin_t/2])
-    make_retainer(case_fd,case_ft,fob_d,coin_d,coin_t,keyhole_d);
+    translate([0,case_fd,coin_t/2]){
+        make_retainer(case_fd,case_ft,fob_d,coin_d,coin_t,keyhole_d);
+        rotate([0,0,-30]) make_ring(3,90){ //snap-fit detents
+            translate([detent_r,0,(coin_t/2)-(detent_sr*.3)]) sphere(detent_sr);
+        }
+    }
 }
 
 //build main body
@@ -123,6 +130,15 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
             cylinder(cs_t+1,d=cn_d*dis_d,center=true);
         }
     }
+    else if (display_trim==1){ //make scales (round) retainers
+        intersection(){
+        make_ring(trim_num){
+            rotate([0,0,feature_r]) translate([cn_d/2,0,0])
+            resize([feat_t*2,0,0]) cylinder(cs_t,d=feat_w,center=true);
+        }
+        cylinder(cs_t+1,d=cn_fd,center=true);
+    }
+    }
     else if (display_trim==2){ //make flag (square) retainers
         make_ring(trim_num){
             rotate([0,0,feature_r]) translate([cn_d/2-feat_t/3,0,0]) cube([feat_t,feat_w,cs_t],center=true);
@@ -131,9 +147,9 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
 }
 
 //rotator function for display features
-module make_ring(count){
+module make_ring(count,degrees=360){
     for( i = [0:count-1]){
-        angle = i * 360 / count;
+        angle = i * degrees / count;
         rotate([0,0,angle])
         children();
     }
