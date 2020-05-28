@@ -1,7 +1,8 @@
 // Coin Holder Keychain
-
-//To Do:
-//Expand display features
+// by Sithrazer
+// https://github.com/Sithrazer/3DPrintingProjects
+// License CC BY-NC-SA
+// https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 /*[Coin Pocket]*/
 //Coin Diameter
@@ -48,6 +49,8 @@ $fn=40; //[4:360]
 body=true;
 //Uncheck to exclude case retainer
 retainer=true;
+//Uncheck to exclude detents
+detent=true;
 coin_fd=coin_d+coin_b; //buffer coin diameter
 coin_ft=coin_t+coin_b; //buffer coin thickness
 case_fd=coin_fd+case_d; //final diameter of case
@@ -60,8 +63,10 @@ if(body){ //make shell with buffered coin vars
     translate([0,0,case_ft/2]){ //correct vertical offset
         difference(){
             make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
-            rotate([0,0,-30]) make_ring(3,90){ //snap-fit detent recesses
-                translate([detent_r,0,-(coin_ft/2)]) sphere(detent_sr);
+            if (detent){
+                rotate([0,0,-30]) make_ring(3,90){ //snap-fit detent recesses
+                    translate([detent_r,0,coin_ft/2]) cylinder(detent_sr*2,r=detent_sr,center=true);
+                }
             }
         }
     }
@@ -70,8 +75,10 @@ if(body){ //make shell with buffered coin vars
 if(retainer){ //make retainer with unbuffered coin vars
     translate([0,case_fd,coin_t/2]){
         make_retainer(case_fd,case_ft,fob_d,coin_d,coin_t,keyhole_d);
-        rotate([0,0,-30]) make_ring(3,90){ //snap-fit detents
-            translate([detent_r,0,(coin_t/2)-(detent_sr*.3)]) sphere(detent_sr);
+        if (detent){
+            rotate([0,0,-30]) make_ring(3,90){ //snap-fit detents
+                translate([detent_r,0,(coin_t/2)-(detent_sr*0.3)]) sphere(detent_sr*0.9);
+            }
         }
     }
 }
@@ -169,14 +176,14 @@ module make_retainer(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
                     translate([cs_d*fob_offset,0,0]) cylinder(cn_t,d=k_d,center=true);
                 }
             }
-            //coin region
+            //coin slot region
             hull(){
                 cylinder(cn_t,d=cn_d,center=true);
                 translate([cs_d*fob_offset+fob_d,0,0]) cylinder(cn_t,d=cn_d,center=true);
             }
         }
         //coin space
-        cylinder(cs_t,d=cn_d,center=true);
+        cylinder(cs_t,d=coin_fd,center=true);
         //keyhole space
         translate([cs_d*fob_offset,0,0]) cylinder(cs_t,d=kh_d,center=true);
     }
