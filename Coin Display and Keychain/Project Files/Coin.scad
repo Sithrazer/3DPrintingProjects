@@ -30,7 +30,7 @@ sides=true;
 //Percentage of coin face to display
 display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
-display_trim=0;//[0:plain,1:scales,2:flags,3:daggers]
+display_trim=0;//[0:Plain,1:Scales,2:Flags,3:Daggers,4:Lace,5:Scallops,6:Wave,7:Sawtooth]
 //Number of trim pieces, no effect on 'plain'
 trim_num=8;//[2:20]
 //Width of trim pieces as percentage of spacing
@@ -148,9 +148,44 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
     }
     }
     else if (display_trim==2){ //make flag (square) retainers
+        intersection(){
         make_ring(trim_num){
             rotate([0,0,feature_r]) translate([cn_d/2-feat_t/3,0,0]) cube([feat_t,feat_w,cs_t],center=true);
         }
+        cylinder(cs_t+1,d=cn_fd,center=true);
+    }
+    }
+    else if (display_trim==3){ //make dagger (triangular) retainers
+        intersection(){
+        make_ring(trim_num){
+            rotate([0,0,feature_r]) translate([cn_d/2,0,-(cs_t/2)]) linear_extrude(height=cs_t) polygon(points=[[0,-(feat_w/2)],[2,0],[0,feat_w/2],[-(feat_t),0]]);
+        }
+        cylinder(cs_t+1,d=cn_fd,center=true);
+    }
+    }
+    else if (display_trim==4){ //make lace retainers
+        intersection(){
+            make_ring(trim_num){
+                difference(){
+                rotate([0,0,feature_r]) translate([cn_d/2,0,0]) resize([feat_t*2,0,0]) cylinder(cs_t,d=feat_w,center=true);
+                rotate([0,0,feature_r]) translate([cn_d/2,0,0]) resize([(feat_t*2)*0.5,0,0]) cylinder(cs_t+1,d=feat_w*0.5,center=true);
+                }
+            }
+            cylinder(cs_t+1,d=cn_fd,center=true);
+        }
+    }
+    else if (display_trim==5){ //make scallops
+        difference(){
+            cylinder(cs_t,d=cn_fd,center=true);
+            cylinder(cs_t+1,d=cn_d*dis_d,center=true);
+            #make_ring(trim_num){
+                rotate([0,0,feature_r]) translate([(cn_d*dis_d)/2,0,0]) resize([feat_t*2,0,0]) cylinder(cs_t+1,d=feat_w,center=true);
+            }
+        }
+    }
+    else if (display_trim==6){ //make wave
+    }
+    else if (display_trim==7){ //make sawtooth
     }
 }
 
