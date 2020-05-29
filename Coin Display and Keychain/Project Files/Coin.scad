@@ -183,10 +183,6 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
             }
         }
     }
-    else if (display_trim==6){ //make wave
-    }
-    else if (display_trim==7){ //make sawtooth
-    }
 }
 
 //rotator function for display features
