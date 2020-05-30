@@ -23,6 +23,18 @@ fob_d=10;
 fob_offset=0.6;//[0.1:0.1:5]
 //Diameter of keyring hole
 keyhole_d=6;
+//Add case trim?
+case_trim=false;
+//Case trim style
+case_trim_style=0; //[0:Scales,1:Flags,2:Daggers,3:Scallops]
+//As a percentage of the case size
+case_trim_size=0.50; //[0.05:0.05:2.00]
+//Number of trim pieces
+case_trim_num=8; //[1:20]
+//Width of trim pieces as percentage of spacing
+case_trim_width=1.0; //[0.05:0.05:2.0]
+//Adjust position of case trim around periphery
+case_trim_r=0.0; //[0.0:0.5:180]
 
 /*[Display Features]*/
 //Display both sides?
