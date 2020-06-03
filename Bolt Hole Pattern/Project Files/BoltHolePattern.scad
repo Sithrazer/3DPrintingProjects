@@ -1,3 +1,10 @@
+//Bolt Hole Pattern
+//by Sithrazer
+//https://www.thingiverse.com/Sithrazer
+//https://github.com/Sithrazer/3DPrintingProjects
+//License: CC BY-NC-SA
+//https://creativecommons.org/licenses/by-nc-sa/4.0/
+
 /*[ALL DIMENSIONS IN MILLIMETERS]*/
 //1 inch equals 25.4 mm
 one_inch=25.4;

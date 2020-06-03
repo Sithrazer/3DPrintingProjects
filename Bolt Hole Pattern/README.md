@@ -1,5 +1,6 @@
 # Bolt Hole Template
 Customizer-ready SCAD for generating a 4-hole bolt pattern template.
+Also available on Thingiverse with customizer enabled at https://www.thingiverse.com/thing:4420938
 
 # Generating the STL
 Open .scad files in OpenSCAD, use the customizer to modify the model to your needs (see screenshots).
