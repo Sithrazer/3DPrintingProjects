@@ -22,11 +22,11 @@ border=3; //[2:8]
 //Template Thickness
 thick=2; //[2:20]
 //Clamp Tabs
-tabs=false;
+tabs=0;//[0:False,1:True]
 
 /*[Edge Guide]*/
 //Edge Guide
-guide=false;
+guide=0;//[0:False,1:True]
 //Edge Guide Side
 guide_side=0;//[0:Short Side,1:Long Side]
 //Edge Guide Distance On-Center
@@ -53,7 +53,7 @@ translate([-(length/2),-(width/2),0])
     make_hole(thick, border, radius);
     
 //Assemble Clamp Tabs
-if (tabs){
+if (tabs==1){
     //long side tab
     translate([0,-(t_width/8)+t_width/2,0])
     cube([length/2, t_width/4,thick],center=true);
@@ -63,10 +63,10 @@ if (tabs){
 }
 
 //Assemble Edge Guides
-if((guide)&&(guide_side==0)){
+if((guide==1)&&(guide_side==0)){
     make_guide(thick, border, width-diameter, guide_dist, guide_height, length);
 }
-if((guide)&&(guide_side==1)){
+if((guide==1)&&(guide_side==1)){
     rotate([0,0,90])
     make_guide(thick, border, length-diameter, guide_dist, guide_height, width);
 }
