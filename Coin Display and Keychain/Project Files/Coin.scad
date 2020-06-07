@@ -23,6 +23,18 @@ fob_d=10;
 fob_offset=0.6;//[0.1:0.1:5]
 //Diameter of keyring hole
 keyhole_d=6;
+//Add case trim?
+case_trim=false;
+//Case trim style
+case_trim_style=0; //[0:Scales,1:Flags,2:Daggers,3:Scallops]
+//As a percentage of the case size
+case_trim_size=0.50; //[0.05:0.05:2.00]
+//Number of trim pieces
+case_trim_num=8; //[1:20]
+//Width of trim pieces as percentage of spacing
+case_trim_width=1.0; //[0.05:0.05:2.0]
+//Adjust position of case trim around periphery
+case_trim_r=0.0; //[0.0:0.5:180]
 
 /*[Display Features]*/
 //Display both sides?
@@ -99,6 +111,9 @@ module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
             cylinder(cs_t+2,d=cn_d,center=true);
         }
         make_display(sides,case_ft,coin_d,display_d,coin_fd,coin_ft);
+        if(case_trim){
+            make_case_trim(case_ft,case_fd,case_trim_style,case_trim_num,case_trim_size,case_trim_width,case_trim_r);
+        }
     }
         //coin slot
         hull(){
@@ -178,10 +193,45 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
         difference(){
             cylinder(cs_t,d=cn_fd,center=true);
             cylinder(cs_t+1,d=cn_d*dis_d,center=true);
-            #make_ring(trim_num){
+            make_ring(trim_num){
                 rotate([0,0,feature_r]) translate([(cn_d*dis_d)/2,0,0]) resize([feat_t*2,0,0]) cylinder(cs_t+1,d=feat_w,center=true);
             }
         }
+    }
+}
+
+module make_case_trim(cs_t,cs_d,trim_style,trim_num,trim_s,trim_w,trim_rot){
+    echo(cs_d);
+    //radial thickness of features
+    feat_t=cs_d/2*trim_s;
+    //circumferential width of features
+    feat_w=(cs_d/trim_num)*trim_w;
+    
+    difference(){
+        if (trim_style==0){ //Scales
+            make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([0,(cs_d/2)*.95,0]) resize([feat_w*2,0,0]) cylinder(cs_t,d=feat_t,center=true);
+            }
+        }
+        else if (trim_style==1){ //Flags
+            make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([cs_d/2,0,0]) cube ([feat_t,feat_w*2,cs_t],center=true);
+            }
+        }
+        else if (trim_style==2){ //Daggers
+            make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([-(cs_d/2)*0.95,0,-(cs_t/2)])linear_extrude(height=cs_t) polygon(points=[[0,-(feat_w)],[2,0],[0,feat_w],[-(feat_t),0]]);
+            }
+        }
+        else if (trim_style==3){ //Scales
+            difference(){
+                cylinder(cs_t,d=cs_d+feat_t,center=true);
+                make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([0,(cs_d/2)+(feat_t/2),0]) resize([feat_w*2,0,0]) cylinder(cs_t+1,d=feat_t,center=true);
+                }
+            }
+        }
+        cylinder(cs_t+1,d=coin_fd,center=true);
     }
 }
 
