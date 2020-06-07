@@ -215,12 +215,21 @@ module make_case_trim(cs_t,cs_d,trim_style,trim_num,trim_s,trim_w,trim_rot){
         }
         else if (trim_style==1){ //Flags
             make_ring(trim_num){
-                #rotate([0,0,trim_rot]) translate([0,cs_d/2,0]) cube ([feat_w*2,feat_t,cs_t],center=true);
+                rotate([0,0,trim_rot]) translate([cs_d/2,0,0]) cube ([feat_t,feat_w*2,cs_t],center=true);
             }
         }
         else if (trim_style==2){ //Daggers
+            make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([-(cs_d/2)*0.95,0,-(cs_t/2)])linear_extrude(height=cs_t) polygon(points=[[0,-(feat_w)],[2,0],[0,feat_w],[-(feat_t),0]]);
+            }
         }
         else if (trim_style==3){ //Scales
+            difference(){
+                cylinder(cs_t,d=cs_d+feat_t,center=true);
+                make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([0,(cs_d/2)+(feat_t/2),0]) resize([feat_w*2,0,0]) cylinder(cs_t+1,d=feat_t,center=true);
+                }
+            }
         }
         cylinder(cs_t+1,d=coin_fd,center=true);
     }
