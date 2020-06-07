@@ -16,7 +16,7 @@ case_d=8;
 //How much thicker than the coin to make the case
 case_t=4; //case thickness
 //Make keyring features?
-keyring=true;
+keyring=1; //[0:False,1:True]
 //Diameter of the keyring feature
 fob_d=10;
 //Keyring feature offset
@@ -24,7 +24,7 @@ fob_offset=0.6;//[0.1:0.1:5]
 //Diameter of keyring hole
 keyhole_d=6;
 //Add case trim?
-case_trim=false;
+case_trim=0; //[0:False,1:True]
 //Case trim style
 case_trim_style=0; //[0:Scales,1:Flags,2:Daggers,3:Scallops]
 //As a percentage of the case size
@@ -38,7 +38,7 @@ case_trim_r=0.0; //[0.0:0.5:180]
 
 /*[Display Features]*/
 //Display both sides?
-sides=true;
+sides=1; //[0:False,1:True]
 //Percentage of coin face to display
 display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
@@ -57,12 +57,12 @@ feature_r=0;//[0:0.5:180]
 coin_b=0.2; //[0:0.05:1]
 //Circle resolution; higher values may result in increased rendering, slicing and print times.
 $fn=40; //[4:360]
-//Uncheck to exclude case body
-body=true;
-//Uncheck to exclude case retainer
-retainer=true;
-//Uncheck to exclude detents
-detent=true;
+//Make case body?
+body=1; //[0:False,1:True]
+//Make case retainer?
+retainer=1; //[0:False,1:True]
+//Make retainer detents?
+detent=1; //[0:False,1:True]
 coin_fd=coin_d+coin_b; //buffer coin diameter
 coin_ft=coin_t+coin_b; //buffer coin thickness
 case_fd=coin_fd+case_d; //final diameter of case
