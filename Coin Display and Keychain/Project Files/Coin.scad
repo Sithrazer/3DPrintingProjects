@@ -208,10 +208,19 @@ module make_case_trim(cs_t,cs_d,trim_style,trim_num,trim_s,trim_w,trim_rot){
     feat_w=(cs_d/trim_num)*trim_w;
     
     difference(){
-    if (trim_style==0){ //Scales
-        make_ring(trim_num){
-            rotate([0,0,trim_rot]) translate([0,(cs_d/2)*.95,0]) resize([feat_w*2,0,0]) cylinder(cs_t,d=feat_t,center=true);
+        if (trim_style==0){ //Scales
+            make_ring(trim_num){
+                rotate([0,0,trim_rot]) translate([0,(cs_d/2)*.95,0]) resize([feat_w*2,0,0]) cylinder(cs_t,d=feat_t,center=true);
+            }
         }
+        else if (trim_style==1){ //Flags
+            make_ring(trim_num){
+                #rotate([0,0,trim_rot]) translate([0,cs_d/2,0]) cube ([feat_w*2,feat_t,cs_t],center=true);
+            }
+        }
+        else if (trim_style==2){ //Daggers
+        }
+        else if (trim_style==3){ //Scales
         }
         cylinder(cs_t+1,d=coin_fd,center=true);
     }
