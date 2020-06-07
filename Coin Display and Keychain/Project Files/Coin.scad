@@ -16,7 +16,7 @@ case_d=8;
 //How much thicker than the coin to make the case
 case_t=4; //case thickness
 //Make keyring features?
-keyring=true;
+keyring=1; //[0:False,1:True]
 //Diameter of the keyring feature
 fob_d=10;
 //Keyring feature offset
@@ -24,7 +24,7 @@ fob_offset=0.6;//[0.1:0.1:5]
 //Diameter of keyring hole
 keyhole_d=6;
 //Add case trim?
-case_trim=false;
+case_trim=0; //[0:False,1:True]
 //Case trim style
 case_trim_style=0; //[0:Scales,1:Flags,2:Daggers,3:Scallops]
 //As a percentage of the case size
@@ -38,7 +38,7 @@ case_trim_r=0.0; //[0.0:0.5:180]
 
 /*[Display Features]*/
 //Display both sides?
-sides=true;
+sides=1; //[0:False,1:True]
 //Percentage of coin face to display
 display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
@@ -57,28 +57,27 @@ feature_r=0;//[0:0.5:180]
 coin_b=0.2; //[0:0.05:1]
 //Circle resolution; higher values may result in increased rendering, slicing and print times.
 $fn=40; //[4:360]
-//Uncheck to exclude case body
-body=true;
-//Uncheck to exclude case retainer
-retainer=true;
-//Uncheck to exclude detents
-detent=true;
+//Make case body?
+body=1; //[0:False,1:True]
+//Make case retainer?
+retainer=1; //[0:False,1:True]
+//Make retainer detents?
+detent=1; //[0:False,1:True]
 coin_fd=coin_d+coin_b; //buffer coin diameter
 coin_ft=coin_t+coin_b; //buffer coin thickness
 case_fd=coin_fd+case_d; //final diameter of case
 case_ft=coin_t+case_t; //final thickness of case
 coin_c=PI*(coin_d/2); //coin circumference
 detent_r=(case_fd/2-coin_fd/2)/2+coin_fd/2;
-detent_sr=1;
+detent_sr=1.0; //[0.5:0.25:5]
+detent_rotext=45; //[15:90]
 
 if(body){ //make shell with buffered coin vars
     translate([0,0,case_ft/2]){ //correct vertical offset
         difference(){
             make_shell(case_fd,case_ft,fob_d,coin_fd,coin_ft,keyhole_d);
             if (detent){
-                rotate([0,0,-30]) make_ring(3,90){ //snap-fit detent recesses
-                    translate([detent_r,0,coin_ft/2]) cylinder(detent_sr*2,r=detent_sr,center=true);
-                }
+                translate([0,0,-(coin_ft/2)]) rotate([0,0,-((detent_rotext+2)/2)]) make_detent(detent_r,detent_sr*1.1,(detent_rotext+2),"square");
             }
         }
     }
@@ -88,9 +87,7 @@ if(retainer){ //make retainer with unbuffered coin vars
     translate([0,case_fd,coin_t/2]){
         make_retainer(case_fd,case_ft,fob_d,coin_d,coin_t,keyhole_d);
         if (detent){
-            rotate([0,0,-30]) make_ring(3,90){ //snap-fit detents
-                translate([detent_r,0,(coin_t/2)-(detent_sr*0.3)]) sphere(detent_sr*0.9);
-            }
+            translate([0,0,coin_t*0.4]) rotate([0,0,-((detent_rotext-2)/2)]) make_detent(detent_r,detent_sr*0.9,(detent_rotext-2));
         }
     }
 }
@@ -264,8 +261,22 @@ module make_retainer(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
             }
         }
         //coin space
-        cylinder(cs_t,d=coin_fd,center=true);
+        cylinder(cs_t,d=coin_fd*1.01,center=true);
         //keyhole space
         translate([cs_d*fob_offset,0,0]) cylinder(cs_t,d=kh_d,center=true);
+    }
+}
+
+//Build detent features
+module make_detent(dt_r, ft_r, ft_a=60,shape="circle"){
+    rotate_extrude(angle=ft_a,convexity=10){
+        translate([dt_r,0,0]){
+            if(shape=="circle"){
+                circle(r=ft_r);
+            }
+            else if(shape=="square"){
+                square(ft_r*2,center=true);
+            }
+        }
     }
 }
