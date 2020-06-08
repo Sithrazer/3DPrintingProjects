@@ -49,13 +49,11 @@ trim_num=8;//[2:20]
 trim_width=1;//[0.1:0.05:2]
 //Adjust position of display features around periphery 
 feature_r=0;//[0:0.5:180]
-//add options for trim size/width/spacing
 
 /*[Advanced]*/
-//pad variables from customizer input
-//buffer coin dimensions by this amount to allow for clearance of the coin into the holder
+//Clearance for coin
 coin_b=0.2; //[0:0.05:1]
-//Circle resolution; higher values may result in increased rendering, slicing and print times.
+//Circle resolution
 $fn=40; //[4:360]
 //Make case body?
 body=1; //[0:False,1:True]
@@ -63,14 +61,17 @@ body=1; //[0:False,1:True]
 retainer=1; //[0:False,1:True]
 //Make retainer detents?
 detent=1; //[0:False,1:True]
+//Detent feature radius
+detent_sr=1.0; //[0.5:0.25:5]
+//Detent feature length (degrees)
+detent_rotext=45; //[15:90]
+
 coin_fd=coin_d+coin_b; //buffer coin diameter
 coin_ft=coin_t+coin_b; //buffer coin thickness
 case_fd=coin_fd+case_d; //final diameter of case
 case_ft=coin_t+case_t; //final thickness of case
 coin_c=PI*(coin_d/2); //coin circumference
 detent_r=(case_fd/2-coin_fd/2)/2+coin_fd/2;
-detent_sr=1.0; //[0.5:0.25:5]
-detent_rotext=45; //[15:90]
 
 if(body){ //make shell with buffered coin vars
     translate([0,0,case_ft/2]){ //correct vertical offset
