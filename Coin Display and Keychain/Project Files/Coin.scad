@@ -42,7 +42,7 @@ sides=1; //[0:False,1:True]
 //Percentage of coin face to display
 display_d=0.95; //[0.05:0.05:1]
 //embellishments around the edge of the retention face
-display_trim=0;//[0:Plain,1:Scales,2:Flags,3:Daggers,4:Lace,5:Scallops,6:Wave,7:Sawtooth]
+display_trim=0;//[0:Plain,1:Scales,2:Flags,3:Daggers,4:Lace,5:Scallops]
 //Number of trim pieces, no effect on 'plain'
 trim_num=8;//[2:20]
 //Width of trim pieces as percentage of spacing
@@ -140,7 +140,6 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
     //close backside if single-sided
     if (!sides) {
         translate([0,0,-(cs_t/2)]) cylinder(cs_t/2-cn_ft/2,d=cn_fd,center=!true);
-        echo();
     }
     
     //choose display feature type
@@ -198,7 +197,6 @@ module make_display(sides,cs_t,cn_d,dis_d,cn_fd,cn_ft){
 }
 
 module make_case_trim(cs_t,cs_d,trim_style,trim_num,trim_s,trim_w,trim_rot){
-    echo(cs_d);
     //radial thickness of features
     feat_t=cs_d/2*trim_s;
     //circumferential width of features
