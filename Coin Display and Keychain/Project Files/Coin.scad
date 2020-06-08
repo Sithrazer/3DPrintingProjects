@@ -28,7 +28,7 @@ case_trim=0; //[0:False,1:True]
 //Case trim style
 case_trim_style=0; //[0:Scales,1:Flags,2:Daggers,3:Scallops]
 //As a percentage of the case size
-case_trim_size=0.50; //[0.05:0.05:2.00]
+case_trim_size=0.25; //[0.05:0.05:2.00]
 //Number of trim pieces
 case_trim_num=8; //[1:20]
 //Width of trim pieces as percentage of spacing
