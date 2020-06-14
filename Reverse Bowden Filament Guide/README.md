@@ -9,16 +9,27 @@ Feeding filament into the extruder can be a little bit trickier with this setup,
 
 # BOM
 (required)
+
 1x Extruder End (printed)
+
 1x Drybox End (printed)
+
 2x 'PC4-M10' Push-to-Connect fittings (fits 4mm OD tubing with M10 threads)
+
 4x M4-12 bolts (For Anet A8/clone, hardware requirements will differ across printers)
+
 4x M4-8 bolts
+
 4x M4 nuts
+
 2 meters PTFE tube for 1.75mm filament (2mm ID/4mm OD)
+
 1 container to serve as the drybox
+
 (optional)
+
 Sealant/caulk
+
 Dessicant
 
 
