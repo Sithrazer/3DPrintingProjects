@@ -1,0 +1,1 @@
+I make no claim of ownership over the patterns used in the making of these stamp designs and therefore cannot dictate license terms over the files in this project directory beyond the request not to use these files for commercial purposes.
