@@ -50,6 +50,10 @@ trim_width=1;//[0.1:0.05:2]
 //Adjust position of display features around periphery 
 feature_r=0;//[0:0.5:180]
 
+/*[Edge Radius]*/
+//Main Body
+body_r=0.0; //[0.0:0.1:10.0]
+
 /*[Advanced]*/
 //Clearance for coin
 coin_b=0.2; //[0:0.05:1]
@@ -97,13 +101,16 @@ if(retainer){ //make retainer with unbuffered coin vars
 module make_shell(cs_d,cs_t,k_d,cn_d,cn_t,kh_d){
     difference(){
     union(){//shell w/through hole
-        difference(){
+         difference(){
             //shell
-            hull(){
-                cylinder(cs_t,d=cs_d,center=true);
-                if(keyring){
-                    translate([cs_d*fob_offset,0,0]) cylinder(cs_t,d=k_d,center=true);
+            minkowski(){ //add radius to outside edges
+                hull(){
+                    cylinder(cs_t-(body_r*2),d=cs_d-(body_r*2),center=true);
+                    if(keyring){
+                        translate([cs_d*fob_offset,0,0]) cylinder(cs_t,d=k_d,center=true);
+                    }
                 }
+            sphere(body_r);
             }
             //face through-hole
             cylinder(cs_t+2,d=cn_d,center=true);
@@ -279,3 +286,5 @@ module make_detent(dt_r, ft_r, ft_a=60,shape="circle"){
         }
     }
 }
+
+//build display base
