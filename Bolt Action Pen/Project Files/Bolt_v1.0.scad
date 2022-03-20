@@ -11,7 +11,6 @@ lever_length = 9; // 9mm (default) protrudes 8mm beyond the body and 5mm beyond 
 color("red") Bolt();
 
 module Bolt(){
-    bolt_length = 29;
     rotate_extrude() hull(){
         BL = bolt_length - 1; // compensate for the radius of the circles/squares
         translate([0,BL,0]) square(1);
